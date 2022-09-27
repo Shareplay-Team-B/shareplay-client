@@ -1,0 +1,16 @@
+.sign-in-main{
+    display: flex;
+    flex-direction: column;
+    background-color: blue;
+}
+
+button{
+    background-color: red;
+    color: black;
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+}
+
