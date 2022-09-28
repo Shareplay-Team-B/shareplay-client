@@ -46,12 +46,12 @@ var options = {
               {
                   loader: 'css-loader',
               },
-              {
-                  loader: 'sass-loader',
-                  options: {
-                      sourceMap: true,
-                  },
-              },
+              // {
+              //     loader: 'sass-loader',
+              //     options: {
+              //         sourceMap: true,
+              //     },
+              // },
           ],
       },
       // {

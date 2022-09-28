@@ -1,3 +1,4 @@
+import './style.css';
 import signInPage from './scripts/sign-in';
 
 // when the pop-up first appears, show the sign-in page
