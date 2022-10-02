@@ -1,70 +1,19 @@
-<div style="width: 100%; height: 100%;">
-        <!-- <link rel="stylesheet" type="text/css" href="sign-in.css"> -->
-        <style>
-            .sign-in-main{
-                display: flex;
-                flex-direction: column;
-                background-color: var(--bg-color);
-                height: 100%;
-                width: 100%;
-                color: var(--default-text-color);
-                align-items: center;
-                justify-content: center;
-            }
-        
-            .page-header{
-                font-family: 'Courier New', Courier, monospace
-
-            }
-
-            label{
-                width: 20vw;
-                text-align: right;
-            }
-
-            input{
-                border-radius: 15px;
-                background-color: lightgray;
-                width: 40vw;
-            }
-
-            button{
-                background-color: var(--button-color);
-                color: black;
-                margin: 10%;
-                border-radius: 15px;
-                width: 40vw;
-            }
-
-            #google-login-btn{
-                background-color: white;
-                color: gray;
-            }
-
-            #create-account-btn{
-                margin-top: 20vh;
-            }
-            
-            .row{
-                display: flex;
-                flex-direction: row;
-                margin: 20px;
-            }
-        </style>     
-
+<div style="width: 100%; height: 100%;">   
         <div class="sign-in-main">
-            <h2 class="page-header"> Login </h2>
-            <div class="row">
-                <label for="email"> email: </label>
-                <input id="email" type="text"></input>
+            <h1 class="page-header">Login</h1>
+            <div class="row-login form-info">
+                <label for="username">Username:</label>
+                <input id="username" type="text"></input>
             </div>
-            <div class="row">
-                <label for="password"> password: </label>
+            <div class="row-login form-info">
+                <label for="password">Password:</label>
                 <input id="password" type="password"></input>
             </div>
             <button id="sign-in-btn">Login</button>
-            <button id="google-login-btn"> Login with Google </button>
-            <button id="create-account-btn"> Create Account </button>
+            <img id="google-logo" src="./pages/images/google-logo.png" alt="google">
+            <span id="label-ca">Don't have an account?</span>
+            <button id="create-account-btn">Create Account</button>
             <div id="sign-in-result"></div>
         </div>
-    </div>
+        <script src="./pages/.js"></script>
+</div>

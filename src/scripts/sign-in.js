@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import { signIn } from './api';
 import { loadPage } from './util';
-import sharingPage from './sharing';
+// import sharingPage from './sharing';
+// eslint-disable-next-line import/no-cycle
+import signUpPage from './sign-up';
 
 /**
  * Called when sign-in button is clicked
@@ -25,11 +27,12 @@ function handleSignInBtnClick() {
   );
 }
 
-/**
- * Called when continue as guest button is clicked
- */
-function handleContinueAsGuestBtnClick() {
-  sharingPage.show();
+function handleRegisterBtnClick() {
+  signUpPage.show();
+}
+
+function handleGoogleAuthBtnClick() {
+
 }
 
 /**
@@ -39,10 +42,12 @@ function show() {
   loadPage('pages/sign-in.html', () => {
     // get elements from the sign-in page
     const signInBtn = $('#sign-in-btn');
-    const continueAsGuestBtn = $('#continue-as-guest-btn');
+    const registerBtn = $('#create-account-btn');
+    const googleAuthBtn = $('#google-logo');
     // have buttons call functions when clicked
     signInBtn.on('click', handleSignInBtnClick);
-    continueAsGuestBtn.on('click', handleContinueAsGuestBtnClick);
+    registerBtn.on('click', handleRegisterBtnClick);
+    googleAuthBtn.on('click', handleGoogleAuthBtnClick);
   });
 }
 
