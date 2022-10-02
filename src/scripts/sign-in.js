@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { signIn } from './api';
 import { loadPage } from './util';
 // import sharingPage from './sharing';
+// eslint-disable-next-line import/no-cycle
 import signUpPage from './sign-up';
 
 /**
@@ -30,6 +31,10 @@ function handleRegisterBtnClick() {
   signUpPage.show();
 }
 
+function handleGoogleAuthBtnClick() {
+
+}
+
 /**
  * Show the page contents and assign event listeners to buttons on the page
  */
@@ -38,9 +43,11 @@ function show() {
     // get elements from the sign-in page
     const signInBtn = $('#sign-in-btn');
     const registerBtn = $('#create-account-btn');
+    const googleAuthBtn = $('#google-logo');
     // have buttons call functions when clicked
     signInBtn.on('click', handleSignInBtnClick);
     registerBtn.on('click', handleRegisterBtnClick);
+    googleAuthBtn.on('click', handleGoogleAuthBtnClick);
   });
 }
 
