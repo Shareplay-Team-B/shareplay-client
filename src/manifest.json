@@ -17,6 +17,12 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "permissions": ["scripting", "proxy", "tts", "ttsEngine", "tabs", "webRequest", "webNavigation"],
-  "host_permissions": ["http://*/*", "https://*/*", "<all_urls>"]
+  "permissions": ["scripting", "proxy", "tts", "ttsEngine", "tabs", "webRequest", "webNavigation", "identity"],
+  "host_permissions": ["http://*/*", "https://*/*", "<all_urls>"],
+  "oauth2": {
+    "client_id": "414125495010-d6t3jc7j3b9f33f56iqc526jpo8v5412.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
+  }
 }
