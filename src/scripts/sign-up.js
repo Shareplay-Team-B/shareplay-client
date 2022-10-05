@@ -26,12 +26,12 @@ function handleSignUpBtnClick() {
       // in MongoDB. This can also allow us to implement a 'search for user'
       // feature where we can make a request to our server to find users
       // by username, email, etc. when we want to share stuff with friends
-      alert('TODO: make request to our server with this new user data');
+      console.log('TODO: make request to our server with this new user data');
       sharingPage.show();
     })
     .catch((error) => {
       console.error(error);
-      alert('Error creating user');
+      console.log('Error creating user');
     });
 }
 

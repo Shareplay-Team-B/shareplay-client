@@ -9,6 +9,7 @@ import { loadPage } from './util';
 import sharingPage from './sharing';
 // eslint-disable-next-line import/no-cycle
 import signUpPage from './sign-up';
+import googleLogin from '../background';
 
 /**
  * Called when sign-in button is clicked
@@ -37,10 +38,10 @@ function handleRegisterBtnClick() {
 }
 
 function handleGoogleAuthBtnClick() {
-  // TODO: remove this cuz sign in with Google is kinda messed up on
-  // Chrome Extensions using Manifest V3 since it loads external scripts
-  // It might be possible, but is a lot of work:
-  // https://stackoverflow.com/questions/72514608/google-chrome-extension-manifest-version-3-to-handle-google-sign-ins
+  const auth = getAuth(firebaseApp);
+  googleLogin(auth);
+  // TODO: can't use google auth until we publish and verify the app by google
+  // but the auth button works!!
 }
 
 function handleAuthChange() {
