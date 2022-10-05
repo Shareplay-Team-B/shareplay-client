@@ -12,11 +12,12 @@ console.log('youtube description element: ', descriptionElement);
 
 // get video element from the HTML page
 const video = $('video')[0];
+console.log('video element: ', video);
 
 /* EXAMPLE OF VIDEO PAUSING *
 // added wait function so that it waits for the page to fully load before trying to pause the video
-// I'm not sure if we'll need this once the extension is further built out, 
-// but I needed it for testing 
+// I'm not sure if we'll need this once the extension is further built out,
+// but I needed it for testing
 const wait = () => {
   console.log('video paused');
   video.pause();
