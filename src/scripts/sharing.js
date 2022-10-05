@@ -1,4 +1,9 @@
+import $ from 'jquery';
+import { getAuth, signOut } from 'firebase/auth';
+import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
+// eslint-disable-next-line import/no-cycle
+import signInPage from './sign-in';
 
 /**
  * Example of sending a message to our content script and getting a response.
@@ -13,6 +18,16 @@ function sendMessageToContentScript() {
   });
 }
 
+function signout() {
+  // allow user to sign out of firebase auth
+  const auth = getAuth(firebaseApp);
+  signOut(auth).then(() => {
+    signInPage.show();
+  }).catch((error) => {
+    console.error(error);
+  });
+}
+
 /**
  * Show the page contents
  */
@@ -20,6 +35,7 @@ function show() {
   loadPage('pages/sharing.html', () => {
     console.log('Page loaded');
     sendMessageToContentScript();
+    $('#sign-out-btn').on('click', signout);
   });
 }
 
