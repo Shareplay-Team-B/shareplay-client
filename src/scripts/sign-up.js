@@ -4,6 +4,7 @@ import {
 } from 'firebase/auth';
 import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
+import { signUp } from './api';
 // eslint-disable-next-line import/no-cycle
 import signInPage from './sign-in';
 // eslint-disable-next-line import/no-cycle
@@ -16,17 +17,28 @@ function handleSignUpBtnClick() {
   const emailInput = $('#email');
   // const usernameInput = $('#username');
   const passwordInput = $('#password');
+  const usernameInput = $('#username');
+  const cpasswordInput = $('#cpassword');
+  const signUpResult = $('#sign-up-result');
   // sign-in with firebase
   createUserWithEmailAndPassword(auth, emailInput?.val(), passwordInput?.val())
     .then((userCredential) => {
       const { user } = userCredential;
       console.log('user created: ', user);
-      // TODO: send this newly created user info to our server endpoint
-      // so we can keep track of everyone registered for our service
-      // in MongoDB. This can also allow us to implement a 'search for user'
-      // feature where we can make a request to our server to find users
-      // by username, email, etc. when we want to share stuff with friends
-      console.log('TODO: make request to our server with this new user data');
+      // TODO: create validations for the register info
+      signUp(
+        usernameInput?.val(),
+        emailInput?.val(),
+        passwordInput?.val(),
+        cpasswordInput?.val(),
+        (response) => {
+          signUpResult.text(JSON.stringify(response.data));
+        },
+        (error) => {
+          const serverError = error?.response?.data?.message;
+          signUpResult.text(serverError || 'Unknown server error');
+        },
+      );
       sharingPage.show();
     })
     .catch((error) => {
