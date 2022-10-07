@@ -3,7 +3,6 @@ import {
   getAuth, onAuthStateChanged, signInWithEmailAndPassword,
 } from 'firebase/auth';
 import { firebaseApp } from './firebase-config';
-// import { signIn } from './api';
 import { loadPage } from './util';
 // eslint-disable-next-line import/no-cycle
 import sharingPage from './sharing';
