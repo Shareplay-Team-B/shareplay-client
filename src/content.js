@@ -10,6 +10,44 @@ console.log('content.js injected into webpage');
 const descriptionElement = $('.ytd-watch-metadata');
 console.log('youtube description element: ', descriptionElement);
 
+// gets youtube video details from the webpage
+const getYTVideoDetails = () => {
+  // getting video title
+  const titleElemParent = $('.title.style-scope.ytd-video-primary-info-renderer');
+  const videoTitleElem = titleElemParent.children()[0];
+  const videoTitle = videoTitleElem.textContent;
+
+  // getting video views
+  const viewCountElemParent = $('ytd-video-view-count-renderer');
+  const viewCountElem = viewCountElemParent.children()[0];
+  const views = viewCountElem.textContent;
+
+  // getting video duration
+  const timeElem = $('div.ytp-time-display.notranslate').children();
+  const totalDurationElem = timeElem.find('span')[2];
+  const totalDuration = totalDurationElem.textContent;
+
+  // getting video description (doesn't include hashtags of the video)
+  const shortDesc = $('yt-formatted-string.content.style-scope.ytd-video-secondary-info-renderer').children()[0].textContent;
+
+  // print all video details
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  console.log('Video title: ', videoTitle);
+  console.log('Views: ', views);
+  console.log('Duration: ', totalDuration);
+  console.log('short desc: ', shortDesc);
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+};
+
+// use setTimeout to wait for page to load before looking for video details
+setTimeout(getYTVideoDetails, 3000);
+
+/* NEED A WORK AROUND TO GET DURATION IF THERES AN AD *
+// right now the code grabs the video duration of the ad instead of the
+// actual video
+// maybe we could check if the div.ytp-ad-persistent-progress-bar-container
+// element is present to tell if ad is playing */
+
 // get video element from the HTML page
 const video = $('video')[0];
 console.log('video element: ', video);
