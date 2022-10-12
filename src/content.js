@@ -6,6 +6,12 @@ import { API_URL } from './scripts/api';
 
 console.log('content.js injected into webpage');
 
+// video detail variables
+let videoTitle;
+let views;
+let duration;
+let shortDesc;
+
 // dummy example code of seraching for the description HTML element of a YouTube video using JQuery
 const descriptionElement = $('.ytd-watch-metadata');
 console.log('youtube description element: ', descriptionElement);
@@ -15,26 +21,26 @@ const getYTVideoDetails = () => {
   // getting video title
   const titleElemParent = $('.title.style-scope.ytd-video-primary-info-renderer');
   const videoTitleElem = titleElemParent.children()[0];
-  const videoTitle = videoTitleElem.textContent;
+  videoTitle = videoTitleElem.textContent;
 
   // getting video views
   const viewCountElemParent = $('ytd-video-view-count-renderer');
   const viewCountElem = viewCountElemParent.children()[0];
-  const views = viewCountElem.textContent;
+  views = viewCountElem.textContent;
 
   // getting video duration
   const timeElem = $('div.ytp-time-display.notranslate').children();
   const totalDurationElem = timeElem.find('span')[2];
-  const totalDuration = totalDurationElem.textContent;
+  duration = totalDurationElem.textContent;
 
   // getting video description (doesn't include hashtags of the video)
-  const shortDesc = $('yt-formatted-string.content.style-scope.ytd-video-secondary-info-renderer').children()[0].textContent;
+  shortDesc = $('yt-formatted-string.content.style-scope.ytd-video-secondary-info-renderer').children()[0].textContent;
 
   // print all video details
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   console.log('Video title: ', videoTitle);
   console.log('Views: ', views);
-  console.log('Duration: ', totalDuration);
+  console.log('Duration: ', duration);
   console.log('short desc: ', shortDesc);
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 };
@@ -91,6 +97,10 @@ socket.on('disconnect', () => {
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
     console.log('got message from popup.js');
-    if (request.greeting === 'hello') { sendResponse({ farewell: 'goodbye' }); }
+    if (request.type === 'VIDEO') {
+      sendResponse({
+        farewell: 'goodbye', title: videoTitle, views, duration, shortDesc,
+      });
+    }
   },
 );
