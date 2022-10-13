@@ -12,11 +12,17 @@ import signInPage from './sign-in';
 function sendMessageToContentScript() {
   // example sending message to content.js
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { greeting: 'hello' }, (response) => {
-      console.log(response.farewell);
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'VIDEO' }, (response) => {
+      console.log('message printing');
+      console.log(' TITLE: ', response.title);
+      console.log(' VIEWS: ', response.views);
+      console.log(' DURATION: ', response.duration);
+      console.log(' DESCRIPTION: ', response.shortDesc);
     });
   });
 }
+
+sendMessageToContentScript();
 
 function signout() {
   // allow user to sign out of firebase auth
