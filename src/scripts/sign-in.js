@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import {
-  getAuth, onAuthStateChanged, signInWithEmailAndPassword,
+  getAuth, signInWithEmailAndPassword, onAuthStateChanged,
 } from 'firebase/auth';
 import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
@@ -14,22 +14,21 @@ import googleLogin from '../background';
  * Called when sign-in button is clicked
  */
 function handleSignInBtnClick() {
-  // get firebase auth variables
-  const auth = getAuth(firebaseApp);
   // get elements from the sign-in page
+  const auth = getAuth(firebaseApp);
   const emailInput = $('#email');
-  // const usernameInput = $('#username');
   const passwordInput = $('#password');
-  const signInResult = $('#sign-in-result');
-  // sign-in with firebase
+  // const signInResult = $('#sign-in-result');
   signInWithEmailAndPassword(auth, emailInput?.val(), passwordInput?.val())
-    .then((userCredential) => {
-      console.log('signed in: ', userCredential);
+    .then(() => {
+      console.log('signed in: ', emailInput?.val());
     })
     .catch((error) => {
       console.error(error);
-      signInResult.text('Error signing in');
+      // eslint-disable-next-line no-alert
+      alert(error.errorInfo.message);
     });
+  console.log('credentials received: ', emailInput?.val(), passwordInput?.val());
 }
 
 function handleRegisterBtnClick() {
@@ -47,7 +46,6 @@ function handleAuthChange() {
   // when the user is logged in, go to the sharing page automatically
   const auth = getAuth(firebaseApp);
   onAuthStateChanged(auth, (user) => {
-    console.log(user);
     if (user) {
       sharingPage.show();
     }
