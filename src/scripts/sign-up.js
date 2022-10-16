@@ -3,8 +3,6 @@ import { loadPage } from './util';
 import { signUp } from './api';
 // eslint-disable-next-line import/no-cycle
 import signInPage from './sign-in';
-// eslint-disable-next-line import/no-cycle
-import sharingPage from './sharing';
 
 async function handleSignUpBtnClick() {
   // get elements from the sign-in page
@@ -12,7 +10,7 @@ async function handleSignUpBtnClick() {
   const passwordInput = $('#password');
   const usernameInput = $('#username');
   const cpasswordInput = $('#cpassword');
-  const signUpResult = $('#sign-up-result');
+  // const signUpResult = $('#sign-up-result');
   signUp(
     usernameInput?.val(),
     emailInput?.val(),
@@ -21,11 +19,14 @@ async function handleSignUpBtnClick() {
     (success) => {
       const successRep = success?.response?.data?.message;
       console.log(successRep);
-      sharingPage.show();
+      // eslint-disable-next-line no-alert
+      alert('Successful in creating user.');
+      signInPage.show();
     },
     (error) => {
       const serverError = error?.response?.data?.message;
-      signUpResult.text(serverError || 'Unknown server error');
+      // eslint-disable-next-line no-alert
+      alert(serverError || 'Unknown server error');
     },
   );
 }

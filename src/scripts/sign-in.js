@@ -18,14 +18,15 @@ function handleSignInBtnClick() {
   const auth = getAuth(firebaseApp);
   const emailInput = $('#email');
   const passwordInput = $('#password');
-  const signInResult = $('#sign-in-result');
+  // const signInResult = $('#sign-in-result');
   signInWithEmailAndPassword(auth, emailInput?.val(), passwordInput?.val())
     .then(() => {
       console.log('signed in: ', emailInput?.val());
     })
     .catch((error) => {
       console.error(error);
-      signInResult.text('Error signing in');
+      // eslint-disable-next-line no-alert
+      alert(error.errorInfo.message);
     });
   console.log('credentials received: ', emailInput?.val(), passwordInput?.val());
 }
