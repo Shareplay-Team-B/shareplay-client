@@ -12,17 +12,18 @@ import signInPage from './sign-in';
 function sendMessageToContentScript() {
   // example sending message to content.js
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'VIDEO' }, (response) => {
-      console.log('message printing');
-      console.log(' TITLE: ', response.title);
-      console.log(' VIEWS: ', response.views);
-      console.log(' DURATION: ', response.duration);
-      console.log(' DESCRIPTION: ', response.shortDesc);
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'connect-to-socket' }, (response) => {
+      console.log('connection: ', response.result);
     });
+    // chrome.tabs.sendMessage(tabs[0].id, { type: 'video' }, (response) => {
+    //   console.log('message printing');
+    //   console.log(' TITLE: ', response.title);
+    //   console.log(' VIEWS: ', response.views);
+    //   console.log(' DURATION: ', response.duration);
+    //   console.log(' DESCRIPTION: ', response.shortDesc);
+    // });
   });
 }
-
-sendMessageToContentScript();
 
 function signout() {
   // allow user to sign out of firebase auth
@@ -39,7 +40,6 @@ function signout() {
  */
 function show() {
   loadPage('pages/sharing.html', () => {
-    console.log('Page loaded');
     sendMessageToContentScript();
     $('#sign-out-btn').on('click', signout);
   });

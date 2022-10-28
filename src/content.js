@@ -4,8 +4,6 @@ import $ from 'jquery';
 import io from 'socket.io-client';
 import { API_URL } from './scripts/api';
 
-console.log('content.js injected into webpage');
-
 // video detail variables
 let videoTitle;
 let views;
@@ -45,9 +43,6 @@ const getYTVideoDetails = () => {
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
 };
 
-// use setTimeout to wait for page to load before looking for video details
-setTimeout(getYTVideoDetails, 3000);
-
 /* NEED A WORK AROUND TO GET DURATION IF THERES AN AD *
 // right now the code grabs the video duration of the ad instead of the
 // actual video
@@ -55,8 +50,43 @@ setTimeout(getYTVideoDetails, 3000);
 // element is present to tell if ad is playing */
 
 // get video element from the HTML page
+let socket;
+// let canUpdate = true;
 const video = $('video')[0];
-console.log('video element: ', video);
+const videoElement = (video.length > 0) ? video[0] : undefined;
+console.log('video element: ', videoElement);
+
+if (videoElement) {
+  // eslint-disable-next-line no-unused-vars
+  videoElement.onpause = (event) => {
+    console.log('paused video');
+    if (socket) {
+      socket.emit('video-update', { action: 'pause', time: videoElement.currentTime });
+    } else {
+      console.log('not connected to shareplay server');
+    }
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  videoElement.onplay = (event) => {
+    console.log('play video');
+    if (socket) {
+      socket.emit('video-update', { action: 'play', time: videoElement.currentTime });
+    } else {
+      console.log('not connected to shareplay server');
+    }
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  videoElement.ontimeupdate = (event) => {
+    console.log('time update');
+    if (socket) {
+      socket.emit('video-update', { action: 'time-update', time: videoElement.currentTime });
+    } else {
+      console.log('not connected to shareplay server');
+    }
+  };
+}
 
 /* EXAMPLE OF VIDEO PAUSING *
 // added wait function so that it waits for the page to fully load before trying to pause the video
@@ -72,23 +102,29 @@ setTimeout(wait, 2000);
 /**
  * Connect to our web socket server to listen for real-time updates and send real-time updates
  */
-const socket = io(API_URL, {
-  reconnection: true,
-  reconnectionDelay: 1000,
-  reconnectionDelayMax: 5000,
-  reconnectionAttempts: 1000,
-});
 
-socket.on('connect', () => {
-  console.log('connected to socket server');
-  // send some dummy data as an example to our socket server's 'test-channel'
-  const sampleData = { someKey1: 'someValue1', someKey2: 'someValue2' };
-  socket.emit('test-channel', sampleData);
-});
+function setupSocketListeners() {
+  socket.on('connect', () => {
+    console.log('connected to socket server');
+  });
 
-socket.on('disconnect', () => {
-  console.log('disconnected from socket server');
-});
+  socket.on('disconnect', () => {
+    socket = undefined;
+    console.log('disconnected from socket server');
+  });
+
+  socket.on('video-update-client', (data) => {
+    console.log('got new video data: ', data);
+    if (videoElement) {
+      if (data?.action === 'play') {
+        videoElement.play();
+      } else if (data?.action === 'pause') {
+        videoElement.pause();
+      }
+      videoElement.currentTime = data.time;
+    }
+  });
+}
 
 /**
  * Example of a message listener, so popup.js can send messages to us and
@@ -96,11 +132,23 @@ socket.on('disconnect', () => {
  */
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-    console.log('got message from popup.js');
-    if (request.type === 'VIDEO') {
-      sendResponse({
-        farewell: 'goodbye', title: videoTitle, views, duration, shortDesc,
-      });
+    if (request.type === 'connect-to-socket') {
+      console.log('working');
+      if (socket) {
+        sendResponse({ result: 'already connected to socket server' });
+      } else {
+        socket = io(API_URL, {
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          reconnectionAttempts: 1000,
+        });
+        setupSocketListeners();
+        sendResponse({ result: 'connected to socket server' });
+      }
+    } else if (request.type === 'video') {
+      // use setTimeout to wait for page to load before looking for video details
+      setTimeout(getYTVideoDetails, 3000);
     }
   },
 );

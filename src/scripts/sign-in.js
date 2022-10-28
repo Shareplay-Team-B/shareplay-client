@@ -28,7 +28,6 @@ function handleSignInBtnClick() {
       // eslint-disable-next-line no-alert
       alert(error.errorInfo.message);
     });
-  console.log('credentials received: ', emailInput?.val(), passwordInput?.val());
 }
 
 function handleRegisterBtnClick() {
