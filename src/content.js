@@ -52,9 +52,10 @@ const getYTVideoDetails = () => {
 // get video element from the HTML page
 let socket;
 // let canUpdate = true;
-const video = $('video')[0];
+const video = $('video');
 const videoElement = (video.length > 0) ? video[0] : undefined;
 console.log('video element: ', videoElement);
+console.log('videos', $('video'));
 
 if (videoElement) {
   // eslint-disable-next-line no-unused-vars
@@ -133,7 +134,6 @@ function setupSocketListeners() {
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
     if (request.type === 'connect-to-socket') {
-      console.log('working');
       if (socket) {
         sendResponse({ result: 'already connected to socket server' });
       } else {
