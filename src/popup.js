@@ -1,5 +1,6 @@
 import './style.css';
 import signInPage from './scripts/sign-in';
+// import sharingPage from './scripts/sharing';
 
 // when the pop-up first appears, show the sign-in page
 signInPage.show();

@@ -40,7 +40,7 @@ input{
 
 button{
     background-color: var(--button-color);
-    color: black;
+    color: white;
     border-radius: 15px;
     width: 60vw;
     height: 6vh;
@@ -92,4 +92,76 @@ button{
 #log-in-btn {
     margin-top: 5%;
     margin-bottom: 8%;
+}
+
+.show-border{
+    border: solid 2px white;
+}
+.content-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: wrap-content;
+    padding: 0px;
+    align-items: center;
+}
+
+.title-row{
+    width: 80vw;
+    height: 60vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.view-row{
+    width: 60vw;
+    height: 3vh;
+}
+
+.share-btn-row{
+    width: 90vw;
+}
+
+#title{
+    /*max-height: 15vh;*/
+    text-overflow: ellipsis;
+    overflow: hidden;    
+    font-size: 30px;
+}
+
+#channelIcon{
+    border-radius: 40px;
+    width: 10vw;
+}
+
+#description{
+    overflow-y: scroll;
+    display: flex;
+    width: 80vw;
+    height: 15vh;
+    padding: 10px;
+}
+
+#thumbnail{
+    padding-top: 5vh;
+    width: 80vw;
+}
+
+.main-btn{
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin: 10px;
+}
+
+#copy-share-link-btn{
+    width: 470px;
+}
+
+button:hover{
+    opacity: 0.8;
+    cursor: pointer;
 }
