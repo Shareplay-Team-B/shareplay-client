@@ -108,19 +108,48 @@ button{
 
 .title-row{
     width: 80vw;
-    height: 60vh;
+    max-height: 50vh;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 .view-row{
-    width: 60vw;
+    min-width: 60vw;
+    max-width: 80vw;
     height: 3vh;
+    font-size: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.vertical-line {
+    border-left: 2px solid white;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 150%;
+    align-items: center;
+}
+
+.channel-row{
+    max-width: 80vw;
+    height: 7vh;
+    /*max-height: 15vh;
+    min-height: 10vh;*/
+    justify-content: space-around;
+    background-color: darkred;
+    border-radius: 15px;
+    padding: 10px;
 }
 
 .share-btn-row{
     width: 90vw;
+    display: flex;
+    flex-direction: column;
+    justify-self: flex-end;
 }
 
 #title{
@@ -128,11 +157,28 @@ button{
     text-overflow: ellipsis;
     overflow: hidden;    
     font-size: 30px;
+    text-align: center;
+    line-height: 1;
 }
 
 #channelIcon{
     border-radius: 40px;
     width: 10vw;
+}
+
+#channelName{
+    font-size: 20px;
+    max-width: 80%;
+    min-width: wrap-content;
+    height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding-left: 7px;
+    padding-right: 7px;
 }
 
 #description{
