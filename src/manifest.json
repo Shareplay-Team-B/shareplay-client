@@ -17,7 +17,11 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
+<<<<<<< HEAD
   "permissions": ["scripting", "proxy", "tts", "ttsEngine", "tabs", "webRequest", "webNavigation", "identity", "storage", "activeTab"],
+=======
+  "permissions": ["scripting", "proxy", "tts", "ttsEngine", "tabs", "webRequest", "webNavigation", "identity", "activeTab"],
+>>>>>>> c0209182ac90caf56a514b0a8074cab51e93eade
   "host_permissions": ["http://*/*", "https://*/*", "<all_urls>"],
   "oauth2": {
     "client_id": "414125495010-d6t3jc7j3b9f33f56iqc526jpo8v5412.apps.googleusercontent.com",
