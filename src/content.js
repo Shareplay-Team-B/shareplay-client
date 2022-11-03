@@ -9,17 +9,29 @@ let videoTitle;
 let views;
 let duration;
 let shortDesc;
+let img;
+let name;
 
-// dummy example code of seraching for the description HTML element of a YouTube video using JQuery
+let socket;
+// dummy example code of searching for the description HTML element of a YT video using JQuery
 const descriptionElement = $('.ytd-watch-metadata');
 console.log('youtube description element: ', descriptionElement);
 
 // gets youtube video details from the webpage
-const getYTVideoDetails = () => {
+function getYTVideoDetails() {
   // getting video title
   const titleElemParent = $('.title.style-scope.ytd-video-primary-info-renderer');
   const videoTitleElem = titleElemParent.children()[0];
   videoTitle = videoTitleElem.textContent;
+
+  // getting channel image
+  img = $('yt-img-shadow#avatar.style-scope.ytd-video-owner-renderer.no-transition')[0].children[0].src;
+  console.log('img src', img);
+
+  // getting channel name
+  console.log('!!!!!!!! GETING CHANNEL NAME !!!!!!!!');
+  name = $('ytd-channel-name')[0].children[0].children[0].children[0].innerHTML;
+  console.log(name);
 
   // getting video views
   const viewCountElemParent = $('ytd-video-view-count-renderer');
@@ -32,16 +44,19 @@ const getYTVideoDetails = () => {
   duration = totalDurationElem.textContent;
 
   // getting video description (doesn't include hashtags of the video)
-  shortDesc = $('yt-formatted-string.content.style-scope.ytd-video-secondary-info-renderer').children()[0].textContent;
+  // shortDesc = $('yt-formatted-string.content.style-scope.ytd-video-secondary-info-renderer')
+  // .children()[0].textContent;
 
   // print all video details
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   console.log('Video title: ', videoTitle);
+  console.log('Channel img: ', img);
+  console.log('Channel name ', name);
   console.log('Views: ', views);
   console.log('Duration: ', duration);
   console.log('short desc: ', shortDesc);
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-};
+}
 
 /* NEED A WORK AROUND TO GET DURATION IF THERES AN AD *
 // right now the code grabs the video duration of the ad instead of the
@@ -50,7 +65,7 @@ const getYTVideoDetails = () => {
 // element is present to tell if ad is playing */
 
 // get video element from the HTML page
-let socket;
+
 // let canUpdate = true;
 const video = $('video');
 const videoElement = (video.length > 0) ? video[0] : undefined;
@@ -89,17 +104,6 @@ if (videoElement) {
   };
 }
 
-/* EXAMPLE OF VIDEO PAUSING *
-// added wait function so that it waits for the page to fully load before trying to pause the video
-// I'm not sure if we'll need this once the extension is further built out,
-// but I needed it for testing
-const wait = () => {
-  console.log('video paused');
-  video.pause();
-};
-setTimeout(wait, 2000);
-*/
-
 /**
  * Connect to our web socket server to listen for real-time updates and send real-time updates
  */
@@ -134,6 +138,7 @@ function setupSocketListeners() {
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
     if (request.type === 'connect-to-socket') {
+      console.log(socket);
       if (socket) {
         sendResponse({ result: 'already connected to socket server' });
       } else {
@@ -143,12 +148,18 @@ chrome.runtime.onMessage.addListener(
           reconnectionDelayMax: 5000,
           reconnectionAttempts: 1000,
         });
+        chrome.storage.sync.set({ key: socket }, () => {
+          console.log(socket);
+        });
         setupSocketListeners();
         sendResponse({ result: 'connected to socket server' });
       }
     } else if (request.type === 'video') {
-      // use setTimeout to wait for page to load before looking for video details
-      setTimeout(getYTVideoDetails, 3000);
+      getYTVideoDetails();
+      sendResponse({
+        // eslint-disable-next-line max-len
+        title: videoTitle, image: img, names: name, numofviews: views, length: duration, /* shortDesc, */
+      });
     }
   },
 );
