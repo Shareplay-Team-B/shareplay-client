@@ -4,8 +4,6 @@ import $ from 'jquery';
 import io from 'socket.io-client';
 import { API_URL } from './scripts/api';
 
-console.log('content.js injected into webpage');
-
 // video detail variables
 let videoTitle;
 let views;
@@ -14,12 +12,13 @@ let shortDesc;
 let img;
 let name;
 
-// dummy example code of seraching for the description HTML element of a YouTube video using JQuery
+let socket;
+// dummy example code of searching for the description HTML element of a YT video using JQuery
 const descriptionElement = $('.ytd-watch-metadata');
 console.log('youtube description element: ', descriptionElement);
 
 // gets youtube video details from the webpage
-const getYTVideoDetails = () => {
+function getYTVideoDetails() {
   // getting video title
   const titleElemParent = $('.title.style-scope.ytd-video-primary-info-renderer');
   const videoTitleElem = titleElemParent.children()[0];
@@ -57,7 +56,7 @@ const getYTVideoDetails = () => {
   console.log('Duration: ', duration);
   console.log('short desc: ', shortDesc);
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-};
+}
 
 /* NEED A WORK AROUND TO GET DURATION IF THERES AN AD *
 // right now the code grabs the video duration of the ad instead of the
@@ -66,40 +65,71 @@ const getYTVideoDetails = () => {
 // element is present to tell if ad is playing */
 
 // get video element from the HTML page
-// const video = $('video')[0];
-// console.log('video element: ', video);
 
-/* EXAMPLE OF VIDEO PAUSING *
-// added wait function so that it waits for the page to fully load before trying to pause the video
-// I'm not sure if we'll need this once the extension is further built out,
-// but I needed it for testing
-const wait = () => {
-  console.log('video paused');
-  video.pause();
-};
-setTimeout(wait, 2000);
-*/
+// let canUpdate = true;
+const video = $('video');
+const videoElement = (video.length > 0) ? video[0] : undefined;
+console.log('video element: ', videoElement);
+console.log('videos', $('video'));
+
+if (videoElement) {
+  // eslint-disable-next-line no-unused-vars
+  videoElement.onpause = (event) => {
+    console.log('paused video');
+    if (socket) {
+      socket.emit('video-update', { action: 'pause', time: videoElement.currentTime });
+    } else {
+      console.log('not connected to shareplay server');
+    }
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  videoElement.onplay = (event) => {
+    console.log('play video');
+    if (socket) {
+      socket.emit('video-update', { action: 'play', time: videoElement.currentTime });
+    } else {
+      console.log('not connected to shareplay server');
+    }
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  videoElement.ontimeupdate = (event) => {
+    console.log('time update');
+    if (socket) {
+      socket.emit('video-update', { action: 'time-update', time: videoElement.currentTime });
+    } else {
+      console.log('not connected to shareplay server');
+    }
+  };
+}
 
 /**
  * Connect to our web socket server to listen for real-time updates and send real-time updates
  */
-const socket = io(API_URL, {
-  reconnection: true,
-  reconnectionDelay: 1000,
-  reconnectionDelayMax: 5000,
-  reconnectionAttempts: 1000,
-});
 
-socket.on('connect', () => {
-  console.log('connected to socket server');
-  // send some dummy data as an example to our socket server's 'test-channel'
-  const sampleData = { someKey1: 'someValue1', someKey2: 'someValue2' };
-  socket.emit('test-channel', sampleData);
-});
+function setupSocketListeners() {
+  socket.on('connect', () => {
+    console.log('connected to socket server');
+  });
 
-socket.on('disconnect', () => {
-  console.log('disconnected from socket server');
-});
+  socket.on('disconnect', () => {
+    socket = undefined;
+    console.log('disconnected from socket server');
+  });
+
+  socket.on('video-update-client', (data) => {
+    console.log('got new video data: ', data);
+    if (videoElement) {
+      if (data?.action === 'play') {
+        videoElement.play();
+      } else if (data?.action === 'pause') {
+        videoElement.pause();
+      }
+      videoElement.currentTime = data.time;
+    }
+  });
+}
 
 /**
  * Example of a message listener, so popup.js can send messages to us and
@@ -107,12 +137,28 @@ socket.on('disconnect', () => {
  */
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-    console.log('got message from popup.js');
-    getYTVideoDetails();
-    if (request.type === 'VIDEO') {
-      console.log('sending response to sharing)');
+    if (request.type === 'connect-to-socket') {
+      console.log(socket);
+      if (socket) {
+        sendResponse({ result: 'already connected to socket server' });
+      } else {
+        socket = io(API_URL, {
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          reconnectionAttempts: 1000,
+        });
+        chrome.storage.sync.set({ key: socket }, () => {
+          console.log(socket);
+        });
+        setupSocketListeners();
+        sendResponse({ result: 'connected to socket server' });
+      }
+    } else if (request.type === 'video') {
+      getYTVideoDetails();
       sendResponse({
-        farewell: 'goodbye', title: videoTitle, img, name, views, duration, /* shortDesc, */
+        // eslint-disable-next-line max-len
+        title: videoTitle, image: img, names: name, numofviews: views, length: duration, /* shortDesc, */
       });
     }
   },
