@@ -5,10 +5,12 @@ import {
 import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
 // eslint-disable-next-line import/no-cycle
-import sharingPage from './sharing';
-// eslint-disable-next-line import/no-cycle
 import signUpPage from './sign-up';
 import googleLogin from '../background';
+// eslint-disable-next-line import/no-cycle
+import homePage from './home';
+// eslint-disable-next-line import/no-cycle
+import sharingPage from './sharing';
 
 /**
  * Called when sign-in button is clicked
@@ -28,7 +30,6 @@ function handleSignInBtnClick() {
       // eslint-disable-next-line no-alert
       alert(error.errorInfo.message);
     });
-  console.log('credentials received: ', emailInput?.val(), passwordInput?.val());
 }
 
 function handleRegisterBtnClick() {
@@ -47,7 +48,14 @@ function handleAuthChange() {
   const auth = getAuth(firebaseApp);
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      sharingPage.show();
+      chrome.storage.sync.get(['key'], (result) => {
+        console.log(result.key);
+        if (result.key) {
+          sharingPage.show();
+        } else {
+          homePage.show();
+        }
+      });
     }
   });
 }
