@@ -56,11 +56,7 @@ function getYTVideoDetails() {
   console.log('Duration: ', duration);
   console.log('short desc: ', shortDesc);
   console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-<<<<<<< HEAD
-};
-=======
 }
->>>>>>> main
 
 /* NEED A WORK AROUND TO GET DURATION IF THERES AN AD *
 // right now the code grabs the video duration of the ad instead of the
@@ -69,11 +65,6 @@ function getYTVideoDetails() {
 // element is present to tell if ad is playing */
 
 // get video element from the HTML page
-<<<<<<< HEAD
-// const video = $('video')[0];
-// console.log('video element: ', video);
-=======
->>>>>>> main
 
 // let canUpdate = true;
 const video = $('video');
@@ -146,14 +137,6 @@ function setupSocketListeners() {
  */
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-<<<<<<< HEAD
-    console.log('got message from popup.js');
-    getYTVideoDetails();
-    if (request.type === 'VIDEO') {
-      console.log('sending response to sharing)');
-      sendResponse({
-        farewell: 'goodbye', title: videoTitle, img, name, views, duration, /* shortDesc, */
-=======
     if (request.type === 'connect-to-socket') {
       console.log(socket);
       if (socket) {
@@ -176,7 +159,6 @@ chrome.runtime.onMessage.addListener(
       sendResponse({
         // eslint-disable-next-line max-len
         title: videoTitle, image: img, names: name, numofviews: views, length: duration, /* shortDesc, */
->>>>>>> main
       });
     }
   },
