@@ -4,7 +4,7 @@ import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
 // eslint-disable-next-line import/no-cycle
 import signInPage from './sign-in';
-// eslint-disable-next-line import/no-cycle
+// eslint-disable-next-line import/no-cycle, import/no-named-as-default
 import homePage from './home';
 
 /**
