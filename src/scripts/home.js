@@ -48,6 +48,9 @@ function sendSocketMessageToContentScript() {
     chrome.tabs.sendMessage(tabs[0].id, { type: 'connect-to-socket' }, (response) => {
       console.log('connection: ', response.result);
       if (response) {
+        chrome.storage.sync.set({ key: 'already connected' }, () => {
+          console.log('already connected');
+        });
         sharingPage.show();
       } else {
         // eslint-disable-next-line no-alert

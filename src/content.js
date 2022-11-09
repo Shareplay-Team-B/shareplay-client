@@ -107,6 +107,11 @@ if (videoElement) {
 /**
  * Connect to our web socket server to listen for real-time updates and send real-time updates
  */
+function chatSend(data) {
+  chrome.runtime.sendMessage(data, (response) => {
+    console.log(response);
+  });
+}
 
 function setupSocketListeners() {
   socket.on('connect', () => {
@@ -129,6 +134,10 @@ function setupSocketListeners() {
       videoElement.currentTime = data.time;
     }
   });
+
+  socket.on('text-session-client', (data) => {
+    chatSend(data);
+  });
 }
 
 /**
@@ -148,9 +157,6 @@ chrome.runtime.onMessage.addListener(
           reconnectionDelayMax: 5000,
           reconnectionAttempts: 1000,
         });
-        chrome.storage.sync.set({ key: socket }, () => {
-          console.log(socket);
-        });
         setupSocketListeners();
         sendResponse({ result: 'connected to socket server' });
       }
@@ -160,6 +166,9 @@ chrome.runtime.onMessage.addListener(
         // eslint-disable-next-line max-len
         title: videoTitle, image: img, names: name, numofviews: views, length: duration, /* shortDesc, */
       });
+    } else if (request.type === 'chat') {
+      socket.emit('text-session', { state: request.text });
+      sendResponse({ result: 'worked' });
     }
   },
 );

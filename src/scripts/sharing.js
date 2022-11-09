@@ -4,6 +4,8 @@ import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
 // eslint-disable-next-line import/no-cycle
 import signInPage from './sign-in';
+// eslint-disable-next-line import/no-cycle
+import homePage from './home';
 
 /**
  * Example of sending a message to our content script and getting a response.
@@ -45,11 +47,27 @@ function sendMessageToContentScript() {
   // });
 }
 
+function sendChatMessageToContent() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'chat', text: document.getElementById('chat-text').value }, (response) => {
+      console.log(response.state);
+    });
+  });
+}
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log(message);
+  sendResponse('worked');
+});
+
 function signout() {
   // allow user to sign out of firebase auth
   const auth = getAuth(firebaseApp);
   signOut(auth).then(() => {
     chrome.storage.sync.clear();
+    chrome.storage.sync.set({ key: 'not connected' }, () => {
+      console.log('not connected');
+    });
     signInPage.show();
   }).catch((error) => {
     console.error(error);
@@ -57,10 +75,11 @@ function signout() {
 }
 
 function endParty() {
-  chrome.storage.sync.get(['key'], (result) => {
-    result.key.emit('disconnect');
-  });
   chrome.storage.sync.clear();
+  chrome.storage.sync.set({ key: 'not connected' }, () => {
+    console.log('not connected');
+  });
+  homePage.show();
 }
 
 /**
@@ -70,6 +89,7 @@ function show() {
   loadPage('pages/sharing.html', () => {
     sendMessageToContentScript();
     $('#sign-out-btn').on('click', signout);
+    $('#txt-chat-btn').on('click', sendChatMessageToContent);
     $('#end-party-btn').on('click', endParty);
   });
 }

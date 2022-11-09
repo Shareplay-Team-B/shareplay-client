@@ -50,7 +50,7 @@ function handleAuthChange() {
     if (user) {
       chrome.storage.sync.get(['key'], (result) => {
         console.log(result.key);
-        if (result.key) {
+        if (result.key === 'already connected') {
           sharingPage.show();
         } else {
           homePage.show();
