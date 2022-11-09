@@ -108,19 +108,60 @@ button{
 
 .title-row{
     width: 80vw;
+<<<<<<< HEAD
+    max-height: 50vh;
+=======
     height: 60vh;
+>>>>>>> main
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 .view-row{
+<<<<<<< HEAD
+    min-width: 60vw;
+    max-width: 80vw;
+    height: 3vh;
+    font-size: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.vertical-line {
+    border-left: 2px solid white;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 150%;
+    align-items: center;
+}
+
+.channel-row{
+    max-width: 80vw;
+    height: 7vh;
+    /*max-height: 15vh;
+    min-height: 10vh;*/
+    justify-content: space-around;
+    background-color: darkred;
+    border-radius: 15px;
+    padding: 10px;
+=======
     width: 60vw;
     height: 3vh;
+>>>>>>> main
 }
 
 .share-btn-row{
     width: 90vw;
+<<<<<<< HEAD
+    display: flex;
+    flex-direction: column;
+    justify-self: flex-end;
+=======
+>>>>>>> main
 }
 
 #title{
@@ -128,6 +169,11 @@ button{
     text-overflow: ellipsis;
     overflow: hidden;    
     font-size: 30px;
+<<<<<<< HEAD
+    text-align: center;
+    line-height: 1;
+=======
+>>>>>>> main
 }
 
 #channelIcon{
@@ -135,6 +181,24 @@ button{
     width: 10vw;
 }
 
+<<<<<<< HEAD
+#channelName{
+    font-size: 20px;
+    max-width: 80%;
+    min-width: wrap-content;
+    height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+=======
+>>>>>>> main
 #description{
     overflow-y: scroll;
     display: flex;
