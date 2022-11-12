@@ -4,7 +4,7 @@ import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
 // eslint-disable-next-line import/no-cycle
 import signInPage from './sign-in';
-// eslint-disable-next-line import/no-cycle, import/no-named-as-default
+// eslint-disable-next-line import/no-cycle
 import homePage from './home';
 
 /**
@@ -50,15 +50,10 @@ function sendMessageToContentScript() {
 function sendChatMessageToContent() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { type: 'chat', text: document.getElementById('chat-text').value }, (response) => {
-      console.log(response.state);
+      console.log(response.result);
     });
   });
 }
-
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log(message);
-  sendResponse('worked');
-});
 
 function signout() {
   // allow user to sign out of firebase auth

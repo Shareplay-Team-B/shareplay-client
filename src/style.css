@@ -135,6 +135,7 @@ button{
     width: 10vw;
 }
 
+
 #description{
     overflow-y: scroll;
     display: flex;

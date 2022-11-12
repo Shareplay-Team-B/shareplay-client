@@ -7,7 +7,7 @@ import { loadPage } from './util';
 // eslint-disable-next-line import/no-cycle
 import signUpPage from './sign-up';
 import googleLogin from '../background';
-// eslint-disable-next-line import/no-cycle, import/no-named-as-default
+// eslint-disable-next-line import/no-cycle
 import homePage from './home';
 // eslint-disable-next-line import/no-cycle
 import sharingPage from './sharing';

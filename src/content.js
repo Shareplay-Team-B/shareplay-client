@@ -107,11 +107,6 @@ if (videoElement) {
 /**
  * Connect to our web socket server to listen for real-time updates and send real-time updates
  */
-function chatSend(data) {
-  chrome.runtime.sendMessage(data, (response) => {
-    console.log(response);
-  });
-}
 
 function setupSocketListeners() {
   socket.on('connect', () => {
@@ -136,7 +131,10 @@ function setupSocketListeners() {
   });
 
   socket.on('text-session-client', (data) => {
-    chatSend(data);
+    console.log(data);
+    chrome.runtime.sendMessage(data, (response) => {
+      console.log(response);
+    });
   });
 }
 
