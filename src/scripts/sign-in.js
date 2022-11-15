@@ -4,6 +4,7 @@ import {
 } from 'firebase/auth';
 import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
+import { signIn } from './api';
 // eslint-disable-next-line import/no-cycle
 import signUpPage from './sign-up';
 import googleLogin from '../background';
@@ -24,6 +25,20 @@ function handleSignInBtnClick() {
   signInWithEmailAndPassword(auth, emailInput?.val(), passwordInput?.val())
     .then(() => {
       console.log('signed in: ', emailInput?.val());
+      signIn(
+        emailInput?.val(),
+        (success) => {
+          const successRep = success?.data?.message;
+          chrome.storage.sync.set({ user: successRep }, () => {
+            console.log(successRep);
+          });
+        },
+        (error) => {
+          const serverError = error?.response?.data?.message;
+          // eslint-disable-next-line no-alert
+          alert(serverError || 'Unknown server error');
+        },
+      );
     })
     .catch((error) => {
       console.error(error);

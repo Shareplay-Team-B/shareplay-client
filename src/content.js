@@ -145,7 +145,6 @@ function setupSocketListeners() {
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
     if (request.type === 'connect-to-socket') {
-      console.log(socket);
       if (socket) {
         sendResponse({ result: 'already connected to socket server' });
       } else {
@@ -156,6 +155,9 @@ chrome.runtime.onMessage.addListener(
           reconnectionAttempts: 1000,
         });
         setupSocketListeners();
+        chrome.storage.sync.get(['user'], (result) => {
+          socket.emit('join-session', result.user);
+        });
         sendResponse({ result: 'connected to socket server' });
       }
     } else if (request.type === 'video') {
@@ -165,8 +167,19 @@ chrome.runtime.onMessage.addListener(
         title: videoTitle, image: img, names: name, numofviews: views, length: duration, /* shortDesc, */
       });
     } else if (request.type === 'chat') {
-      socket.emit('text-session', { state: request.text });
+      chrome.storage.sync.get(['party'], (result) => {
+        socket.to(result.party).emit('text-session', { state: request.text, code: result.party });
+      });
       sendResponse({ result: 'worked' });
+    } else if (request.type === 'join') {
+      socket = io(API_URL, {
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        reconnectionAttempts: 1000,
+      });
+      socket.emit('join-session', request.code);
+      sendResponse({ result: 'joined room' });
     }
   },
 );

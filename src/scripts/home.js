@@ -51,6 +51,7 @@ function sendSocketMessageToContentScript() {
         chrome.storage.sync.set({ key: 'already connected' }, () => {
           console.log('already connected');
         });
+        chrome.storage.sync.set({ party: document.getElementById('room-code').value });
         sharingPage.show();
       } else {
         // eslint-disable-next-line no-alert
@@ -71,7 +72,23 @@ function signout() {
 }
 
 function hostParty() {
+  chrome.storage.sync.get(['user'], (result) => {
+    chrome.storage.sync.set({ party: result.user });
+  });
   sendSocketMessageToContentScript();
+}
+
+function joinParty() {
+  console.log(document.getElementById('room-code').value);
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'join', code: document.getElementById('room-code').value }, (response) => {
+      console.log(response.result);
+      if (response.result === 'joined room') {
+        chrome.storage.sync.set({ party: document.getElementById('room-code').value });
+        sharingPage.show();
+      }
+    });
+  });
 }
 
 /**
@@ -82,6 +99,7 @@ function show() {
     sendVideoMessageToContentScript();
     $('#sign-out-btn').on('click', signout);
     $('#host-party-btn').on('click', hostParty);
+    $('#join-party-btn').on('click', joinParty);
   });
 }
 

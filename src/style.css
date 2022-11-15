@@ -108,15 +108,28 @@ button{
 
 .title-row{
     width: 80vw;
-    height: 60vh;
+    height: 30vh;
     display: flex;
     flex-direction: row;
     align-items: center;
+    text-align: center;
 }
 
 .view-row{
     width: 60vw;
     height: 3vh;
+}
+
+#views{
+    font-size: 15px;
+}
+
+#duration{
+    font-size: 15px;
+}
+
+.info-items{
+    padding: 3vh;
 }
 
 .share-btn-row{
@@ -127,12 +140,17 @@ button{
     /*max-height: 15vh;*/
     text-overflow: ellipsis;
     overflow: hidden;    
-    font-size: 30px;
+    font-size: 20px;
 }
 
 #channelIcon{
     border-radius: 40px;
     width: 10vw;
+}
+
+#channelName{
+    font-size: 15px;
+    padding-left: 3vh;
 }
 
 
@@ -156,6 +174,16 @@ button{
     align-items: center;
     justify-content: space-around;
     margin: 10px;
+}
+
+#sep{
+    font-size: 20px;
+    padding-top: 1vh;
+}
+
+.other-main-btn{
+    padding-top: 1vh;
+    padding-bottom: 2vh;
 }
 
 #copy-share-link-btn{
