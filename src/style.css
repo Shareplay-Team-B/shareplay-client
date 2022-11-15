@@ -108,18 +108,13 @@ button{
 
 .title-row{
     width: 80vw;
-<<<<<<< HEAD
     max-height: 50vh;
-=======
-    height: 60vh;
->>>>>>> main
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
 .view-row{
-<<<<<<< HEAD
     min-width: 60vw;
     max-width: 80vw;
     height: 3vh;
@@ -148,20 +143,13 @@ button{
     background-color: darkred;
     border-radius: 15px;
     padding: 10px;
-=======
-    width: 60vw;
-    height: 3vh;
->>>>>>> main
 }
 
 .share-btn-row{
     width: 90vw;
-<<<<<<< HEAD
     display: flex;
     flex-direction: column;
     justify-self: flex-end;
-=======
->>>>>>> main
 }
 
 #title{
@@ -169,11 +157,8 @@ button{
     text-overflow: ellipsis;
     overflow: hidden;    
     font-size: 30px;
-<<<<<<< HEAD
     text-align: center;
     line-height: 1;
-=======
->>>>>>> main
 }
 
 #channelIcon{
@@ -181,7 +166,6 @@ button{
     width: 10vw;
 }
 
-<<<<<<< HEAD
 #channelName{
     font-size: 20px;
     max-width: 80%;
@@ -197,8 +181,6 @@ button{
     padding-right: 7px;
 }
 
-=======
->>>>>>> main
 #description{
     overflow-y: scroll;
     display: flex;

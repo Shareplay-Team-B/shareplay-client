@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=Lobster&display=swap');
+
+html{
+    /*background: rgb(2,0,36);
+    background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(103,103,103,1) 0%, rgba(226,10,51,1) 99%);*/
+    height: 100%;
+}
+
+body{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100vw;
+    color: white;
+    align-items: center;
+    justify-content: space-around;
+    background: rgb(57,44,44);
+    background: linear-gradient(0deg, rgba(57,44,44,1) 0%, rgba(165,7,37,1) 32%, rgba(226,10,51,1) 80%);
+    font-size: 25px;
+}
+
+col{
+    display: flex;
+    flex-direction: column;
+}
+
+#directions{
+    animation-name: fadeIn;
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+}
+
+.display-vertically{
+    display: flex;
+    flex-direction: column;
+    background-color: blue;
+}
+
+#shareplay-title{
+    animation-duration: 7.5s;
+    animation-iteration-count: infinite;
+    /*transform-origin: bottom;*/
+    animation-name: bounce;
+    color: white;
+    font-size: 180px;
+    font-family: 'Lobster', cursive;
+    /*animation-timing-function: ease;*/
+}
+
+h1{
+    font-size: 40px;
+    color: white;
+}
+
+ol {
+    line-height: 1.8;
+}
+
+svg{
+    width: 30px;
+}
+
+.credit{
+    display: flex; 
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+@keyframes bounce {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-100px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateX(600px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
