@@ -108,72 +108,39 @@ button{
 
 .title-row{
     width: 80vw;
-<<<<<<< HEAD
-    max-height: 50vh;
-=======
-    height: 60vh;
->>>>>>> main
+    height: 30vh;
     display: flex;
     flex-direction: row;
     align-items: center;
+    text-align: center;
 }
 
 .view-row{
-<<<<<<< HEAD
-    min-width: 60vw;
-    max-width: 80vw;
-    height: 3vh;
-    font-size: 20px;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-}
-
-.vertical-line {
-    border-left: 2px solid white;
-    margin-right: 20px;
-    margin-left: 20px;
-    height: 150%;
-    align-items: center;
-}
-
-.channel-row{
-    max-width: 80vw;
-    height: 7vh;
-    /*max-height: 15vh;
-    min-height: 10vh;*/
-    justify-content: space-around;
-    background-color: darkred;
-    border-radius: 15px;
-    padding: 10px;
-=======
     width: 60vw;
     height: 3vh;
->>>>>>> main
+}
+
+#views{
+    font-size: 15px;
+}
+
+#duration{
+    font-size: 15px;
+}
+
+.info-items{
+    padding: 3vh;
 }
 
 .share-btn-row{
     width: 90vw;
-<<<<<<< HEAD
-    display: flex;
-    flex-direction: column;
-    justify-self: flex-end;
-=======
->>>>>>> main
 }
 
 #title{
     /*max-height: 15vh;*/
     text-overflow: ellipsis;
     overflow: hidden;    
-    font-size: 30px;
-<<<<<<< HEAD
-    text-align: center;
-    line-height: 1;
-=======
->>>>>>> main
+    font-size: 20px;
 }
 
 #channelIcon{
@@ -181,24 +148,12 @@ button{
     width: 10vw;
 }
 
-<<<<<<< HEAD
 #channelName{
-    font-size: 20px;
-    max-width: 80%;
-    min-width: wrap-content;
-    height: 100%;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    padding-left: 7px;
-    padding-right: 7px;
+    font-size: 15px;
+    padding-left: 3vh;
 }
 
-=======
->>>>>>> main
+
 #description{
     overflow-y: scroll;
     display: flex;
@@ -219,6 +174,16 @@ button{
     align-items: center;
     justify-content: space-around;
     margin: 10px;
+}
+
+#sep{
+    font-size: 20px;
+    padding-top: 1vh;
+}
+
+.other-main-btn{
+    padding-top: 1vh;
+    padding-bottom: 2vh;
 }
 
 #copy-share-link-btn{

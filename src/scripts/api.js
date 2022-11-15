@@ -8,14 +8,12 @@ const API_URL = 'http://localhost:8080';
 /**
  * Request to sign-in endpoint of our server
  * @param {string} email email of the user
- * @param {string} password password of the user
  * @param {function} successCallback function called when API call is successful (status 200)
  * @param {function} errorCallback function called when API has error (ex: status 400 or 500)
  */
-function signIn(email, password, successCallback, errorCallback) {
+function signIn(email, successCallback, errorCallback) {
   axios.post(`${API_URL}/api/v1/auth/sign-in`, {
     email: email || '',
-    password: password || '',
   }).then(successCallback, errorCallback);
 }
 

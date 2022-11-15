@@ -129,6 +129,13 @@ function setupSocketListeners() {
       videoElement.currentTime = data.time;
     }
   });
+
+  socket.on('text-session-client', (data) => {
+    console.log(data);
+    chrome.runtime.sendMessage(data, (response) => {
+      console.log(response);
+    });
+  });
 }
 
 /**
@@ -138,7 +145,6 @@ function setupSocketListeners() {
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
     if (request.type === 'connect-to-socket') {
-      console.log(socket);
       if (socket) {
         sendResponse({ result: 'already connected to socket server' });
       } else {
@@ -148,10 +154,10 @@ chrome.runtime.onMessage.addListener(
           reconnectionDelayMax: 5000,
           reconnectionAttempts: 1000,
         });
-        chrome.storage.sync.set({ key: socket }, () => {
-          console.log(socket);
-        });
         setupSocketListeners();
+        chrome.storage.sync.get(['user'], (result) => {
+          socket.emit('join-session', result.user);
+        });
         sendResponse({ result: 'connected to socket server' });
       }
     } else if (request.type === 'video') {
@@ -160,6 +166,20 @@ chrome.runtime.onMessage.addListener(
         // eslint-disable-next-line max-len
         title: videoTitle, image: img, names: name, numofviews: views, length: duration, /* shortDesc, */
       });
+    } else if (request.type === 'chat') {
+      chrome.storage.sync.get(['party'], (result) => {
+        socket.to(result.party).emit('text-session', { state: request.text, code: result.party });
+      });
+      sendResponse({ result: 'worked' });
+    } else if (request.type === 'join') {
+      socket = io(API_URL, {
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        reconnectionAttempts: 1000,
+      });
+      socket.emit('join-session', request.code);
+      sendResponse({ result: 'joined room' });
     }
   },
 );

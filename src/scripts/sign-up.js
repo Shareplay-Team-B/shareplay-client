@@ -17,7 +17,7 @@ async function handleSignUpBtnClick() {
     passwordInput?.val(),
     cpasswordInput?.val(),
     (success) => {
-      const successRep = success?.response?.data?.message;
+      const successRep = success?.data?.message;
       console.log(successRep);
       // eslint-disable-next-line no-alert
       alert('Successful in creating user.');

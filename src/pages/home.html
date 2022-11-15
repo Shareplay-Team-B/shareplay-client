@@ -2,19 +2,24 @@
 <div class="sign-in-main">
     <!--<img id="thumbnail" src="https://i.ytimg.com/sh/tgnOEVz6d20vijq8a4_scA/market.jpg">-->
     <div class="content-row title-row show-border">
-        <h4 id="title" class="show-border"> Video Title </h2>
+        <h4 id="title"> Video Title </h2>
     </div>
     <div class="content-row">
         <img id="channelIcon" src="https://yt3.ggpht.com/ytc/AMLnZu8WlOYRHgD6WGKJuLFyL9vfpO-RpuHhgrplE-afSQ=s176-c-k-c0x00ffffff-no-rj">
         <h5 id="channelName"></h5>
     </div>
-    <div class="content-row view-row show-border"> 
+    <div class="content-row view-row show-border info-items"> 
         <p id="views"> # Views </p> 
         <p id="duration"> Duration </p> 
     </div>
     <!--<p id="description" class="show-border desc"> description </p>-->
-    <div class="content-row share-btn-row show-border"> 
+    <div class="content-row share-btn-row"> 
         <button class="main-btn" id="host-party-btn">Host Party</button>
+    </div>
+    <p id="sep">or</p>
+    <div class="content-row share-btn-row other-main-btn"> 
+        <input type="text" id="room-code" name="room-code" placeholder="Party Code"><br><br>
+        <button class="main-btn" id="join-party-btn">Join Party</button>
     </div>
     <button id="sign-out-btn">Sign Out</button>
     <script src="./pages/.js"></script>
