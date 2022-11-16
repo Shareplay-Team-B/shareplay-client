@@ -131,10 +131,11 @@ function setupSocketListeners() {
   });
 
   socket.on('text-session-client', (data) => {
-    console.log(data);
-    chrome.runtime.sendMessage(data, (response) => {
-      console.log(response);
-    });
+    console.log('here');
+    console.log(data.message);
+    // chrome.runtime.sendMessage(data, (response) => {
+    //   console.log(response);
+    // });
   });
 }
 
@@ -157,6 +158,7 @@ chrome.runtime.onMessage.addListener(
         setupSocketListeners();
         chrome.storage.sync.get(['user'], (result) => {
           socket.emit('join-session', result.user);
+          chrome.storage.sync.set({ party: result.user });
         });
         sendResponse({ result: 'connected to socket server' });
       }
@@ -168,7 +170,8 @@ chrome.runtime.onMessage.addListener(
       });
     } else if (request.type === 'chat') {
       chrome.storage.sync.get(['party'], (result) => {
-        socket.to(result.party).emit('text-session', { state: request.text, code: result.party });
+        console.log(result.party);
+        socket.emit('text-session', { state: request.text, code: result.party });
       });
       sendResponse({ result: 'worked' });
     } else if (request.type === 'join') {
@@ -178,7 +181,9 @@ chrome.runtime.onMessage.addListener(
         reconnectionDelayMax: 5000,
         reconnectionAttempts: 1000,
       });
+      setupSocketListeners();
       socket.emit('join-session', request.code);
+      chrome.storage.sync.set({ party: request.code });
       sendResponse({ result: 'joined room' });
     }
   },
