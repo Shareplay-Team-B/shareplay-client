@@ -36,7 +36,7 @@ function handleSignInBtnClick() {
         (error) => {
           const serverError = error?.response?.data?.message;
           // eslint-disable-next-line no-alert
-          alert(serverError || 'Unknown server error');
+          console.log(serverError || 'Unknown server error');
         },
       );
     })

@@ -13,6 +13,7 @@ let img;
 let name;
 
 let socket;
+let canUpdateOthers;
 // dummy example code of searching for the description HTML element of a YT video using JQuery
 const descriptionElement = $('.ytd-watch-metadata');
 console.log('youtube description element: ', descriptionElement);
@@ -77,7 +78,9 @@ if (videoElement) {
   videoElement.onpause = (event) => {
     console.log('paused video');
     if (socket) {
-      socket.emit('video-update', { action: 'pause', time: videoElement.currentTime });
+      chrome.storage.sync.get(['party'], (result) => {
+        socket.emit('video-update', { code: result.party, action: 'pause', time: videoElement.currentTime });
+      });
     } else {
       console.log('not connected to shareplay server');
     }
@@ -87,7 +90,9 @@ if (videoElement) {
   videoElement.onplay = (event) => {
     console.log('play video');
     if (socket) {
-      socket.emit('video-update', { action: 'play', time: videoElement.currentTime });
+      chrome.storage.sync.get(['party'], (result) => {
+        socket.emit('video-update', { code: result.party, action: 'play', time: videoElement.currentTime });
+      });
     } else {
       console.log('not connected to shareplay server');
     }
@@ -95,11 +100,17 @@ if (videoElement) {
 
   // eslint-disable-next-line no-unused-vars
   videoElement.ontimeupdate = (event) => {
-    console.log('time update');
-    if (socket) {
-      socket.emit('video-update', { action: 'time-update', time: videoElement.currentTime });
-    } else {
-      console.log('not connected to shareplay server');
+    if (videoElement.paused) {
+      console.log('time update');
+      if (socket && canUpdateOthers) {
+        chrome.storage.sync.get(['party'], (result) => {
+          socket.emit('video-update', { code: result.party, action: 'time-update', time: videoElement.currentTime });
+        });
+      } else if (socket && !canUpdateOthers) {
+        console.log('you are not the host');
+      } else {
+        console.log('not connected to shareplay server');
+      }
     }
   };
 }
@@ -125,17 +136,18 @@ function setupSocketListeners() {
         videoElement.play();
       } else if (data?.action === 'pause') {
         videoElement.pause();
+      } else if (data?.action === 'time-update') {
+        videoElement.currentTime = data.time;
       }
-      videoElement.currentTime = data.time;
     }
   });
 
   socket.on('text-session-client', (data) => {
-    console.log('here');
+    console.log(data.sender);
     console.log(data.message);
-    // chrome.runtime.sendMessage(data, (response) => {
-    //   console.log(response);
-    // });
+    chrome.runtime.sendMessage(data, (response) => {
+      console.log(response);
+    });
   });
 }
 
@@ -156,10 +168,12 @@ chrome.runtime.onMessage.addListener(
           reconnectionAttempts: 1000,
         });
         setupSocketListeners();
-        chrome.storage.sync.get(['user'], (result) => {
-          socket.emit('join-session', result.user);
-          chrome.storage.sync.set({ party: result.user });
-        });
+        socket.emit('join-session', request.party);
+        chrome.storage.sync.set({ party: request.party });
+        chrome.storage.sync.set({ host: request.host });
+        if (request.host === 'me') {
+          canUpdateOthers = true;
+        }
         sendResponse({ result: 'connected to socket server' });
       }
     } else if (request.type === 'video') {
@@ -169,10 +183,7 @@ chrome.runtime.onMessage.addListener(
         title: videoTitle, image: img, names: name, numofviews: views, length: duration, /* shortDesc, */
       });
     } else if (request.type === 'chat') {
-      chrome.storage.sync.get(['party'], (result) => {
-        console.log(result.party);
-        socket.emit('text-session', { state: request.text, code: result.party });
-      });
+      socket.emit('text-session', { state: request.text, code: request.code, name: request.person });
       sendResponse({ result: 'worked' });
     } else if (request.type === 'join') {
       socket = io(API_URL, {
@@ -184,7 +195,14 @@ chrome.runtime.onMessage.addListener(
       setupSocketListeners();
       socket.emit('join-session', request.code);
       chrome.storage.sync.set({ party: request.code });
+      chrome.storage.sync.set({ host: request.host });
+      if (request.host === 'not me') {
+        canUpdateOthers = false;
+      }
       sendResponse({ result: 'joined room' });
+    } else if (request.type === 'leave') {
+      socket.emit('leave-session', request.code);
+      sendResponse({ result: 'left room' });
     }
   },
 );

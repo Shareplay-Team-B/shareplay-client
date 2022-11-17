@@ -11,6 +11,12 @@ import homePage from './home';
  * Example of sending a message to our content script and getting a response.
  * This can be used to get stuff like video title, description, etc.
  */
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // add code to add to screen here
+  console.log(request.message);
+  sendResponse('worked');
+});
+
 function sendMessageToContentScript() {
   // example sending message to content.js
   // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -48,9 +54,13 @@ function sendMessageToContentScript() {
 }
 
 function sendChatMessageToContent() {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'chat', text: document.getElementById('chat-text').value }, (response) => {
-      console.log(response.result);
+  chrome.storage.sync.get(['party', 'user'], (result) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, {
+        type: 'chat', text: document.getElementById('chat-text').value, code: result.party, person: result.user,
+      }, (response) => {
+        console.log(response.result);
+      });
     });
   });
 }
@@ -59,6 +69,13 @@ function signout() {
   // allow user to sign out of firebase auth
   const auth = getAuth(firebaseApp);
   signOut(auth).then(() => {
+    chrome.storage.sync.get(['party'], (result) => {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { type: 'leave', code: result.party }, (response) => {
+          console.log(response.result);
+        });
+      });
+    });
     chrome.storage.sync.clear();
     chrome.storage.sync.set({ key: 'not connected' }, () => {
       console.log('not connected');

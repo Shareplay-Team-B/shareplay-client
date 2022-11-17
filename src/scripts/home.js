@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { v4 as uuidv4 } from 'uuid';
 import { getAuth, signOut } from 'firebase/auth';
 import { firebaseApp } from './firebase-config';
 import { loadPage } from './util';
@@ -43,15 +44,17 @@ function sendVideoMessageToContentScript() {
 }
 
 function sendSocketMessageToContentScript() {
+  const code = uuidv4();
+  console.log(code);
   // example sending message to content.js
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'connect-to-socket' }, (response) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'connect-to-socket', party: code, host: 'me' }, (response) => {
       console.log('connection: ', response.result);
       if (response) {
         chrome.storage.sync.set({ key: 'already connected' }, () => {
           console.log('already connected');
         });
-        chrome.storage.sync.set({ party: document.getElementById('room-code').value });
+        chrome.storage.sync.set({ party: code });
         sharingPage.show();
       } else {
         // eslint-disable-next-line no-alert
@@ -59,6 +62,10 @@ function sendSocketMessageToContentScript() {
       }
     });
   });
+}
+
+function hostParty() {
+  sendSocketMessageToContentScript();
 }
 
 function signout() {
@@ -71,17 +78,10 @@ function signout() {
   });
 }
 
-function hostParty() {
-  chrome.storage.sync.get(['user'], (result) => {
-    chrome.storage.sync.set({ party: result.user });
-  });
-  sendSocketMessageToContentScript();
-}
-
 function joinParty() {
   console.log(document.getElementById('room-code').value);
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type: 'join', code: document.getElementById('room-code').value }, (response) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'join', code: document.getElementById('room-code').value, host: 'not me' }, (response) => {
       console.log(response.result);
       if (response.result === 'joined room') {
         chrome.storage.sync.set({ party: document.getElementById('room-code').value });
