@@ -45,7 +45,6 @@ function sendVideoMessageToContentScript() {
 
 function sendSocketMessageToContentScript() {
   const code = uuidv4();
-  console.log(code);
   // example sending message to content.js
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { type: 'connect-to-socket', party: code, host: 'me' }, (response) => {
@@ -55,6 +54,7 @@ function sendSocketMessageToContentScript() {
           console.log('already connected');
         });
         chrome.storage.sync.set({ party: code });
+        chrome.storage.sync.set({ host: 'me' });
         sharingPage.show();
       } else {
         // eslint-disable-next-line no-alert
@@ -85,6 +85,9 @@ function joinParty() {
       console.log(response.result);
       if (response.result === 'joined room') {
         chrome.storage.sync.set({ party: document.getElementById('room-code').value });
+        chrome.storage.sync.set({ key: 'already connected' }, () => {
+          console.log('already connected');
+        });
         sharingPage.show();
       }
     });

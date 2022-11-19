@@ -12,46 +12,14 @@ import homePage from './home';
  * This can be used to get stuff like video title, description, etc.
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  // add code to add to screen here
-  console.log(request.message);
+  if (request === 'left') {
+    homePage.show();
+  } else {
+    // add code to add to screen here
+    console.log(request.message);
+  }
   sendResponse('worked');
 });
-
-function sendMessageToContentScript() {
-  // example sending message to content.js
-  // chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-  //   chrome.tabs.sendMessage(tabs[0].id, { type: 'video' }, (response) => {
-  //     console.log('sharing.js printing response values from content.js');
-  //     // console.log(' VIDEO: ', response.video);
-  //     // console.log(' VIDEO SRC: ', response.video.src);
-  //     console.log(' TITLE: ', response.title);
-  //     console.log(' VIEWS: ', response.views);
-  //     console.log(' DURATION: ', response.duration);
-  //     // console.log(' DESCRIPTION: ', response.shortDesc);
-
-  //     /* const video = $('#sharing-video')[0];
-  //     video.src = response.video.src; */
-
-  //     const channelIcon = $('#channelIcon')[0];
-  //     channelIcon.src = response.img;
-
-  //     const channelName = $('#channelName')[0];
-  //     channelName.innerHTML = response.name;
-
-  //     const title = $('#title')[0];
-  //     title.innerText = response.title;
-
-  //     const views = $('#views')[0];
-  //     views.innerText = response.views;
-
-  //     const duration = $('#duration')[0];
-  //     duration.innerText = response.duration;
-
-  //     /* const desc = $('#description')[0];
-  //     desc.innerText = response.shortDesc; */
-  //   });
-  // });
-}
 
 function sendChatMessageToContent() {
   chrome.storage.sync.get(['party', 'user'], (result) => {
@@ -69,9 +37,9 @@ function signout() {
   // allow user to sign out of firebase auth
   const auth = getAuth(firebaseApp);
   signOut(auth).then(() => {
-    chrome.storage.sync.get(['party'], (result) => {
+    chrome.storage.sync.get(['party', 'host'], (result) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.tabs.sendMessage(tabs[0].id, { type: 'leave', code: result.party }, (response) => {
+        chrome.tabs.sendMessage(tabs[0].id, { type: 'leave', code: result.party, host: result.host }, (response) => {
           console.log(response.result);
         });
       });
@@ -87,6 +55,13 @@ function signout() {
 }
 
 function endParty() {
+  chrome.storage.sync.get(['party', 'host'], (result) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.tabs.sendMessage(tabs[0].id, { type: 'leave', code: result.party, host: result.host }, (response) => {
+        console.log(response.result);
+      });
+    });
+  });
   chrome.storage.sync.clear();
   chrome.storage.sync.set({ key: 'not connected' }, () => {
     console.log('not connected');
@@ -94,15 +69,22 @@ function endParty() {
   homePage.show();
 }
 
+function shareCode() {
+  chrome.storage.sync.get(['party'], (result) => {
+    // eslint-disable-next-line no-alert
+    alert(`Party Code: ${result.party}`);
+  });
+}
+
 /**
  * Show the page contents
  */
 function show() {
   loadPage('pages/sharing.html', () => {
-    sendMessageToContentScript();
     $('#sign-out-btn').on('click', signout);
     $('#txt-chat-btn').on('click', sendChatMessageToContent);
     $('#end-party-btn').on('click', endParty);
+    $('#share-btn').on('click', shareCode);
   });
 }
 
