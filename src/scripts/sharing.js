@@ -50,7 +50,7 @@ function sendMessageToContentScript() {
 function sendChatMessageToContent() {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, { type: 'chat', text: document.getElementById('chat-text').value }, (response) => {
-      console.log(response.result);
+      console.log(response.text);
     });
   });
 }

@@ -1,50 +1,59 @@
-body {
-    background-color: rgba(108,122,137);
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=Lobster&family=Raleway:wght@300&display=swap');
+
+.body-class {
+    /*background-color: rgba(108,122,137);
+    background-color: rgb(153, 7, 7);*/
     --default-text-color: white;
     --button-color: red;
+    --theme-red: rgb(188, 9, 42);
+    background: var(--theme-red);
     width: 300px;
     height: 500px;
-    box-shadow: 0px 0px 10px black;
+    /*box-shadow: 0px 0px 10px yellow;*/
 }
 
 .sign-in-main{
+    background-color: black;
     display: flex;
     flex-direction: column;
-    background-color: var(--bg-color);
-    height: 100%;
-    width: 100%;
+    border-radius: 5px;
+    /*background-color: var(--bg-color);*/
+    height: 500px;
+    width: 300px;
     color: var(--default-text-color);
     align-items: center;
     justify-content: center;
 }
 
 .page-header{
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Raleway', sans-serif;
     margin-top: 10%;
 }
 
 label{
     width: 20vw;
-    text-align: right;
+    text-align: left;
     font-size: 15px;
     padding-right: 5vw;
+    font-family: 'Raleway', sans-serif;
 }
 
 input{
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: lightgray;
     width: 60vw;
     height: 8vw;
     outline: none;
+    border: none;
 }
 
 button{
-    background-color: var(--button-color);
+    background-color: var(--theme-red);
     color: white;
     border-radius: 15px;
     width: 60vw;
     height: 6vh;
-    box-shadow: 0px 0px 5px black;
+    /*box-shadow: 0px 0px 5px black;*/
 }
 
 #google-logo{
@@ -66,8 +75,9 @@ button{
 
 .row-login{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin: 20px;
+    align-items: flex-start;
 }
 
 .row-register {
@@ -113,11 +123,40 @@ button{
     flex-direction: row;
     align-items: center;
     text-align: center;
+    border-radius: 15px;
 }
 
 .view-row{
+    max-width: 80vw;
+    height: 7vh;
+    /*max-height: 15vh;
+    min-height: 10vh;*/
+    justify-content: space-around;
+    background-color: darkred;
+    border-radius: 15px;
+    padding: 15px;
     width: 60vw;
     height: 3vh;
+}
+
+.vertical-line {
+    border-left: 2px solid white;
+    margin-right: 20px;
+    margin-left: 20px;
+    height: 150%;
+    align-items: center;
+}
+
+.channel-row{
+    max-width: 80vw;
+    height: 7vh;
+    margin-top: 10px;
+    /*max-height: 15vh;
+    min-height: 10vh;*/
+    justify-content: space-around;
+    background-color: darkred;
+    border-radius: 15px;
+    padding: 10px;
 }
 
 #views{
@@ -126,10 +165,6 @@ button{
 
 #duration{
     font-size: 15px;
-}
-
-.info-items{
-    padding: 3vh;
 }
 
 .share-btn-row{
@@ -177,7 +212,6 @@ button{
 
 #sep{
     font-size: 20px;
-    padding-top: 1vh;
 }
 
 .other-main-btn{
@@ -192,4 +226,108 @@ button{
 button:hover{
     opacity: 0.8;
     cursor: pointer;
+}
+
+/* Sharing page styling */
+#sharing-body{
+    background-color: var(--theme-red);
+}
+
+#chat-container{
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+}
+
+#chat-header{
+    height: 10%;
+    /*background: rgb(57,44,44);
+    background: linear-gradient(0deg, rgba(165,7,37,1) 12%, rgba(226,10,51,1) 80%);
+    */color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    
+}
+
+#chat-header > h3{
+    font-family: 'Raleway', sans-serif;
+}
+
+#chat{
+    background-color: #030404;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    color: white;
+}
+
+.msg-container{
+    width: 60%;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.msg-header{
+    margin: 0px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.msg{
+    margin: 0px;
+    padding: 7px;
+    border-radius: 15px;
+    width: fit-content;
+}
+
+.sent{
+    align-self: flex-end;
+    text-align: right;
+}
+
+.sent > .msg{
+    background-color: #bc2912;
+    text-align: left;
+}
+
+.recieved > .msg{
+    background-color: #717171;
+}
+
+#chat-footer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    background-color: black;
+    height: 20%;
+}
+
+#chat-footer > button{
+    width: 80px;
+}
+
+#chat-footer > input{
+    height: 70px;
+    display: flex;
+}
+
+
+#party-btns-container{
+    height: 10vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#party-btns-container > button{
+    width: fit-content;
+    padding: 5px;
+    background-color: black;
+    border: white solid 1.2px;
 }
