@@ -1,9 +1,38 @@
-<div>
-    <p>TODO: this is the main page of our application with that shows all the info and the invite link etc.</p>
-    <button id="end-party-btn">End Party</button>
-    <button id="sign-out-btn">Sign Out</button>
-    <input type="text" id="chat-text" value="text">
-    <button type="button" id="txt-chat-btn">Click</button>
-    <button type="button" id="share-btn">Share</button>
+<div id="sharing-body">
+    <script src="https://kit.fontawesome.com/949676afa2.js" crossorigin="anonymous"></script>
+
+    <div id="chat-container">
+        <div id="chat-header">
+            <h3> Party Chat </h3>
+        </div>
+        <div id="chat">
+            <!-- messages -->
+            <div class="msg-container recieved">
+                <p class="msg-header">Other User</p>
+                <p class="msg"> Message that the user recieves </p>
+            </div>
+            <div class="msg-container sent">
+                <p class="msg-header">Me</p>
+                <p class="msg"> Message that the user sends </p>
+            </div>
+            <div class="msg-container sent">
+                <p class="msg-header">Me</p>
+                <p class="msg"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+            </div>
+            <div class="msg-container recieved">
+                <p class="msg-header">Other User</p>
+                <p class="msg"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </div>
+        <div id="chat-footer">
+            <input type="text" id="chat-text" placeholder="Text">
+        <button type="button" id="txt-chat-btn">Send<i class="fa-solid fa-paper-plane-top"></i></button>
+        </div>
+    </div>
+    <div id="party-btns-container">
+        <button id="sign-out-btn">Sign Out</button>
+        <button type="button" id="share-btn">Share</button>
+        <button id="end-party-btn">End Party</button>
+    </div>
     <p id="test"></p>
 </div>
