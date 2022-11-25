@@ -7,16 +7,29 @@ import signInPage from './sign-in';
 // eslint-disable-next-line import/no-cycle
 import homePage from './home';
 
-/**
- * Example of sending a message to our content script and getting a response.
- * This can be used to get stuff like video title, description, etc.
- */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request === 'left') {
     homePage.show();
-  } else {
+  } else if (request.message) {
     // add code to add to screen here
-    console.log(request.message);
+    const container = document.getElementById('chat');
+    chrome.storage.sync.get(['user'], (result) => {
+      if (request.sender === result.user) {
+        container.innerHTML += `<div class="msg-container sent">
+                                  <p class="msg-header">${request.sender}</p>
+                                  <p class="msg-sent">${request.message}</p>
+                              </div>`;
+      } else if (request.sender === 'computer') {
+        container.innerHTML += `<div class="msg-container computer">
+                                  <p><i>${request.message}</i></p>
+                              </div>`;
+      } else {
+        container.innerHTML += `<div class="msg-container recieved">
+                                  <p class="msg-header">${request.sender}</p>
+                                  <p class="msg-recieved">${request.message}</p>
+                              </div>`;
+      }
+    });
   }
   sendResponse('worked');
 });
