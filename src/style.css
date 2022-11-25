@@ -277,25 +277,43 @@ button:hover{
     margin-left: 10px;
 }
 
-.msg{
+.msg-sent {
     margin: 0px;
     padding: 7px;
     border-radius: 15px;
     width: fit-content;
+    align-self: flex-end;
+    padding-top: 5px;
+    font-size: 15px;
+}
+
+.msg-recieved {
+    margin: 0px;
+    padding: 7px;
+    border-radius: 15px;
+    width: fit-content;
+    align-self: flex-start;
+    padding-top: 5px;
+    font-size: 15px;
 }
 
 .sent{
-    align-self: flex-end;
     text-align: right;
+    align-self: flex-end;
 }
 
-.sent > .msg{
+.sent > .msg-sent{
     background-color: #bc2912;
-    text-align: left;
+    text-align: right;  
 }
 
-.recieved > .msg{
+.recieved > .msg-recieved{
     background-color: #717171;
+}
+
+.computer{
+    text-align: center;
+    flex-direction: column;
 }
 
 #chat-footer{

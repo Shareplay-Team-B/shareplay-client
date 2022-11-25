@@ -21,13 +21,4 @@ function googleLogin(auth) {
   });
 }
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  chrome.runtime.sendMessage({
-    msg: message,
-  }, (response) => {
-    console.log(response);
-  });
-  sendResponse('worked');
-});
-
 export default googleLogin;
