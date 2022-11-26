@@ -25,6 +25,10 @@ async function handleSignUpBtnClick() {
     },
     (error) => {
       const serverError = error?.response?.data?.message;
+      document.getElementById('email').value = '';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('cpassword').value = '';
       // eslint-disable-next-line no-alert
       alert(serverError || 'Unknown server error');
     },
