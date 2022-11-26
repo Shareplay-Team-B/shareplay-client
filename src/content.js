@@ -171,6 +171,15 @@ function setupSocketListeners() {
       console.log(response);
     });
   });
+
+  socket.on('host-left-session', (data) => {
+    chrome.storage.sync.get(['host'], (result) => {
+      socket.emit('leave-session', { code: data, host: result.host });
+    });
+    chrome.runtime.sendMessage('left', (response) => {
+      console.log(response);
+    });
+  });
 }
 
 /**
@@ -193,7 +202,6 @@ chrome.runtime.onMessage.addListener(
         socket.emit('join-session', request.party);
         chrome.storage.sync.set({ party: request.party });
         chrome.storage.sync.set({ host: request.host });
-
         sendResponse({ result: 'connected to socket server' });
       }
     } else if (request.type === 'video') {
@@ -218,7 +226,6 @@ chrome.runtime.onMessage.addListener(
       socket.emit('join-session', request.code);
       chrome.storage.sync.set({ party: request.code });
       chrome.storage.sync.set({ host: request.host });
-
       sendResponse({ result: 'joined room' });
     } else if (request.type === 'leave') {
       socket.emit('leave-session', { code: request.code, host: request.host });

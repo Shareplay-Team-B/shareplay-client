@@ -39,20 +39,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                               </div>`;
       }
     });
-    // chrome.storage.sync.set({ chats: allMessages });
-    // allMessages.push([request.sender, request.message]);
-    // chrome.storage.sync.get(['chats'], (result) => {
-    //   // console.log(result.chats);
-    //   // console.log(allMessages);
-    //   const newChats = result.chats.concat(allMessages);
-    //   chrome.storage.sync.set({ chats: newChats });
-    // });
-
-    // chrome.storage.sync.get(['chats'], (result) => {
-    //   console.log(result.chats);
-    // });
-    // allMessages.push([request.sender, request.message]);
-    // chrome.storage.sync.set({ chats: allMessages });
   }
   sendResponse('worked');
 });
