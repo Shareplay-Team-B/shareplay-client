@@ -7,11 +7,20 @@ import signInPage from './sign-in';
 // eslint-disable-next-line import/no-cycle
 import homePage from './home';
 
+function afterParty() {
+  chrome.storage.sync.clear();
+  chrome.storage.sync.set({ key: 'not connected' }, () => {
+    console.log('not connected');
+  });
+  homePage.show();
+}
+
+// const allMessages = [];
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request === 'left') {
-    homePage.show();
+    afterParty();
   } else if (request.message) {
-    // add code to add to screen here
     const container = document.getElementById('chat');
     chrome.storage.sync.get(['user'], (result) => {
       if (request.sender === result.user) {
@@ -20,7 +29,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                                   <p class="msg-sent">${request.message}</p>
                               </div>`;
       } else if (request.sender === 'computer') {
-        container.innerHTML += `<div class="msg-container computer">
+        container.innerHTML += `<div class="computer">
                                   <p><i>${request.message}</i></p>
                               </div>`;
       } else {
@@ -34,6 +43,35 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   sendResponse('worked');
 });
 
+function addMessages() {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type: 'give-chats' }, (response) => {
+      const messages = response.result;
+      chrome.storage.sync.get(['user'], (result) => {
+        for (let i = 0; i < messages.length; i += 1) {
+          const container = document.getElementById('chat');
+          // eslint-disable-next-line no-loop-func
+          if (messages[i][0] === result.user) {
+            container.innerHTML += `<div class="msg-container sent">
+                                        <p class="msg-header">${messages[i][0]}</p>
+                                        <p class="msg-sent">${messages[i][1]}</p>
+                                    </div>`;
+          } else if (messages[i][0] === 'computer') {
+            container.innerHTML += `<div class="computer">
+                                        <p><i>${messages[i][1]}</i></p>
+                                    </div>`;
+          } else {
+            container.innerHTML += `<div class="msg-container recieved">
+                                        <p class="msg-header">${messages[i][0]}</p>
+                                        <p class="msg-recieved">${messages[i][1]}</p>
+                                    </div>`;
+          }
+        }
+      });
+    });
+  });
+}
+
 function sendChatMessageToContent() {
   chrome.storage.sync.get(['party', 'user'], (result) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -41,6 +79,7 @@ function sendChatMessageToContent() {
         type: 'chat', text: document.getElementById('chat-text').value, code: result.party, person: result.user,
       }, (response) => {
         console.log(response.result);
+        document.getElementById('chat-text').value = '';
       });
     });
   });
@@ -98,6 +137,7 @@ function show() {
     $('#txt-chat-btn').on('click', sendChatMessageToContent);
     $('#end-party-btn').on('click', endParty);
     $('#share-btn').on('click', shareCode);
+    addMessages();
   });
 }
 

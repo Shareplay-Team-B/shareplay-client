@@ -32,6 +32,7 @@ function handleSignInBtnClick() {
           chrome.storage.sync.set({ user: successRep }, () => {
             console.log(successRep);
           });
+          chrome.storage.sync.set({ count: 0 });
         },
         (error) => {
           const serverError = error?.response?.data?.message;
@@ -41,9 +42,10 @@ function handleSignInBtnClick() {
       );
     })
     .catch((error) => {
-      console.error(error);
       // eslint-disable-next-line no-alert
       alert(error.errorInfo.message);
+      document.getElementById('password').value = '';
+      document.getElementById('email').value = '';
     });
 }
 
