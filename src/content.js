@@ -4,6 +4,8 @@ import $ from 'jquery';
 import io from 'socket.io-client';
 import { API_URL } from './scripts/api';
 
+chrome.storage.sync.clear();
+
 // video detail variables
 let videoTitle;
 let views;
@@ -108,19 +110,16 @@ if (videoElement) {
     if (videoElement.paused) {
       console.log('time update');
       chrome.storage.sync.get(['host'], (result) => {
-        if (result.host === 'not me') {
-          console.log('you are not the host.');
-          // eslint-disable-next-line no-useless-return
-          return;
+        if (result.host === 'me') {
+          if (socket) {
+            chrome.storage.sync.get(['party'], (result1) => {
+              socket.emit('video-update', { code: result1.party, action: 'time-update', time: videoElement.currentTime });
+            });
+          } else {
+            console.log('not connected to shareplay server');
+          }
         }
       });
-      if (socket) {
-        chrome.storage.sync.get(['party'], (result) => {
-          socket.emit('video-update', { code: result.party, action: 'time-update', time: videoElement.currentTime });
-        });
-      } else {
-        console.log('not connected to shareplay server');
-      }
     }
   };
 }
@@ -192,14 +191,23 @@ chrome.runtime.onMessage.addListener(
       if (socket) {
         sendResponse({ result: 'already connected to socket server' });
       } else {
-        socket = io(API_URL, {
-          reconnection: true,
-          reconnectionDelay: 1000,
-          reconnectionDelayMax: 5000,
-          reconnectionAttempts: 1000,
-        });
+        if (!socket) {
+          socket = io(API_URL, {
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            reconnectionAttempts: 1000,
+          });
+        }
+        console.log('setup socket server connection');
         setupSocketListeners();
-        socket.emit('join-session', request.party);
+        if (request?.host === 'me') {
+          console.log('request 1', request);
+          socket.emit('join-session', { code: request?.party, host: 'me' });
+        } else {
+          console.log('request 2', request);
+          socket.emit('join-session', { code: request?.party });
+        }
         chrome.storage.sync.set({ party: request.party });
         chrome.storage.sync.set({ host: request.host });
         sendResponse({ result: 'connected to socket server' });
@@ -216,14 +224,17 @@ chrome.runtime.onMessage.addListener(
     } else if (request.type === 'give-chats') {
       sendResponse({ result: allMessages });
     } else if (request.type === 'join') {
-      socket = io(API_URL, {
-        reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        reconnectionAttempts: 1000,
-      });
+      if (!socket) {
+        socket = io(API_URL, {
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          reconnectionAttempts: 1000,
+        });
+      }
+      console.log('setup socket server connection');
       setupSocketListeners();
-      socket.emit('join-session', request.code);
+      socket.emit('join-session', { code: request?.code, host: request?.host });
       chrome.storage.sync.set({ party: request.code });
       chrome.storage.sync.set({ host: request.host });
       sendResponse({ result: 'joined room' });
