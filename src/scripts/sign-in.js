@@ -43,7 +43,7 @@ function handleSignInBtnClick() {
     })
     .catch((error) => {
       // eslint-disable-next-line no-alert
-      alert(error.errorInfo.message);
+      alert(String(error).slice(37).slice(0, -2));
       document.getElementById('password').value = '';
       document.getElementById('email').value = '';
     });
