@@ -108,19 +108,16 @@ if (videoElement) {
     if (videoElement.paused) {
       console.log('time update');
       chrome.storage.sync.get(['host'], (result) => {
-        if (result.host === 'not me') {
-          console.log('you are not the host.');
-          // eslint-disable-next-line no-useless-return
-          return;
+        if (result.host === 'me') {
+          if (socket) {
+            chrome.storage.sync.get(['party'], (result1) => {
+              socket.emit('video-update', { code: result1.party, action: 'time-update', time: videoElement.currentTime });
+            });
+          } else {
+            console.log('not connected to shareplay server');
+          }
         }
       });
-      if (socket) {
-        chrome.storage.sync.get(['party'], (result) => {
-          socket.emit('video-update', { code: result.party, action: 'time-update', time: videoElement.currentTime });
-        });
-      } else {
-        console.log('not connected to shareplay server');
-      }
     }
   };
 }
@@ -155,8 +152,6 @@ function setupSocketListeners() {
   });
 
   socket.on('text-session-client', (data) => {
-    console.log(data.sender);
-    console.log(data.message);
     chrome.runtime.sendMessage(data, (response) => {
       console.log(response);
     });
