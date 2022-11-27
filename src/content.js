@@ -166,15 +166,6 @@ function setupSocketListeners() {
       console.log(response);
     });
   });
-
-  socket.on('host-left-session', (data) => {
-    chrome.storage.sync.get(['host'], (result) => {
-      socket.emit('leave-session', { code: data, host: result.host });
-    });
-    chrome.runtime.sendMessage('left', (response) => {
-      console.log(response);
-    });
-  });
 }
 
 /**
