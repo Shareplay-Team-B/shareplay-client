@@ -187,6 +187,7 @@ chrome.runtime.onMessage.addListener(
           reconnectionDelay: 1000,
           reconnectionDelayMax: 5000,
           reconnectionAttempts: 1000,
+          secure: true,
         });
         setupSocketListeners();
         socket.emit('join-session', request.party);
@@ -211,6 +212,7 @@ chrome.runtime.onMessage.addListener(
         reconnectionDelay: 1000,
         reconnectionDelayMax: 5000,
         reconnectionAttempts: 1000,
+        secure: true,
       });
       setupSocketListeners();
       socket.emit('join-session', request.code);

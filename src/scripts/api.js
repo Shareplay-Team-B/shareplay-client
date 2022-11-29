@@ -4,7 +4,7 @@ import axios from 'axios';
  * http://shareplay-server-b.herokuapp.com/
  * http://localhost:8080
  */
-const API_URL = 'http://shareplay-server-b.herokuapp.com/';
+const API_URL = 'https://shareplay-server-b.herokuapp.com/';
 
 /**
  * Request to sign-in endpoint of our server
