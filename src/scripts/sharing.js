@@ -8,14 +8,13 @@ import signInPage from './sign-in';
 import homePage from './home';
 
 function afterParty() {
-  chrome.storage.sync.clear();
   chrome.storage.sync.set({ key: 'not connected' }, () => {
     console.log('not connected');
   });
+  const container = document.getElementById('chat');
+  container.innerHTML = '';
   homePage.show();
 }
-
-// const allMessages = [];
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request === 'left') {
@@ -96,7 +95,6 @@ function signout() {
         });
       });
     });
-    chrome.storage.sync.clear();
     chrome.storage.sync.set({ key: 'not connected' }, () => {
       console.log('not connected');
     });
@@ -114,7 +112,6 @@ function endParty() {
       });
     });
   });
-  chrome.storage.sync.clear();
   chrome.storage.sync.set({ key: 'not connected' }, () => {
     console.log('not connected');
   });

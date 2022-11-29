@@ -13,7 +13,7 @@ let img;
 let name;
 
 let socket;
-const allMessages = [];
+let allMessages = [];
 
 // dummy example code of searching for the description HTML element of a YT video using JQuery
 const descriptionElement = $('.ytd-watch-metadata');
@@ -165,6 +165,7 @@ function setupSocketListeners() {
     chrome.runtime.sendMessage('left', (response) => {
       console.log(response);
     });
+    allMessages = [];
   });
 }
 
@@ -176,6 +177,9 @@ chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
     if (request.type === 'connect-to-socket') {
       if (socket) {
+        socket.emit('join-session', request.party);
+        chrome.storage.sync.set({ party: request.party });
+        chrome.storage.sync.set({ host: request.host });
         sendResponse({ result: 'already connected to socket server' });
       } else {
         socket = io(API_URL, {
@@ -214,6 +218,7 @@ chrome.runtime.onMessage.addListener(
       chrome.storage.sync.set({ host: request.host });
       sendResponse({ result: 'joined room' });
     } else if (request.type === 'leave') {
+      allMessages = [];
       socket.emit('leave-session', { code: request.code, host: request.host });
       sendResponse({ result: 'left room' });
     }
